@@ -1,0 +1,31 @@
+use("db_prueba");
+db.createCollection("counters");
+db.counters.insertMany([
+    { id: "usuarioId", sequence_value: 0 }
+]);
+
+function siguienteId(coleccion) {
+    const sequenceDocument = db.counters.findOneAndUpdate(
+        { id: `${coleccion}Id` },
+        { $inc: { sequence_value: 1 } },
+        { returnDocument: "after" }
+    );
+    return sequenceDocument.sequence_value;
+}
+
+db.rol.insertMany([
+    {
+        id: Number(siguienteId("rol")),
+        rol: "admin",
+        permisos:{
+            "/*": ["*"]
+        }
+    },
+    {
+        id: Number(siguienteId("rol")),
+        rol: "usuario",
+        permisos:{
+            "/usuario": ["1.0.0", "get", "put"]
+        }
+    }
+]);
