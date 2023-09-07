@@ -59,3 +59,8 @@ export const getHamburguesaOrderV2 = async (req, res) => {
     ]).toArray();
     res.send(result);
 }
+
+export const getHamburguesaCaraV2 = async (req, res) => {
+    let result = await collection.find().sort({ "price": -1 }).limit(1).toArray();
+    res.send(result);
+}
