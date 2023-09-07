@@ -1,31 +1,288 @@
-use("db_prueba");
-db.createCollection("counters");
-db.counters.insertMany([
-    { id: "usuarioId", sequence_value: 0 }
+use("filtroMongo_IvanGarces");
+
+db.createCollection("ingrediente", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ['_id', 'name', 'stock', 'description', 'price'],
+            properties: {
+                _id: {
+                    bsonType: "objectId"
+                },
+                name: {
+                    bsonType: "string",
+                    description: "'nombre' must be a string and is required"
+                },
+                stock: {
+                    bsonType: "int",
+                    description: "'cantidad' must be an integer and is required"
+                },
+                description: {
+                    bsonType: "string",
+                    description: "'descripcion' must be a string and is required"
+                },
+                price: {
+                    bsonType: "int",
+                    description: "'precio' must be an integer and is required"
+                }
+            }
+        }
+    }
+});
+db.ingrediente.insertMany([
+    {
+        name: "Tomate rojo",
+        stock: 80,
+        description: "Tomate clasico y fresco del campo",
+        price: 1
+    },
+    {
+        name: "Queso cheddar",
+        stock: 30,
+        description: "Delicioso queso cheddar de la marca quesito",
+        price: 3
+    },
+    {
+        name: "Pan Brioche",
+        stock: 100,
+        description: "Pan elaborada con harina, muy poca azúcar, un poco de leche, huevo y mantequilla",
+        price: 5
+    },
+    {
+        name: "Quesillo",
+        stock: 50,
+        description: "Quesillo del d2",
+        price: 2
+    },
+    {
+        name: "Cebolla roja",
+        stock: 100,
+        description: "Cebolla clasica y fresca del campo",
+        price: 1
+    },
+    {
+        name: "Queso costeño",
+        stock: 50,
+        description: "Queso clasico y fresco del campo",
+        price: 4
+    },
+    {
+        name: "Salsa de tomate",
+        stock: 100,
+        description: "Marca Fruko, clasico",
+        price: 1
+    },
+    {
+        name: "Mostaza",
+        stock: 100,
+        description: "Marca Fruko, clasico",
+        price: 1
+    },
+    {
+        name: "Tartara",
+        stock: 401,
+        description: "Salsa de la casa",
+        price: 1
+    },
+    {
+        name: "Salsa de rosada",
+        stock: 0,
+        description: "Marca Fruko, clasico",
+        price: 1
+    },
+    {
+        name: "Pan",
+        stock: 0,
+        description: "Clasico",
+        price: 1
+    }
 ]);
 
-function siguienteId(coleccion) {
-    const sequenceDocument = db.counters.findOneAndUpdate(
-        { id: `${coleccion}Id` },
-        { $inc: { sequence_value: 1 } },
-        { returnDocument: "after" }
-    );
-    return sequenceDocument.sequence_value;
-}
+db.createCollection("chef", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ['_id', 'name', 'specialism', 'number'],
+            properties: {
+                _id: {
+                    bsonType: "objectId"
+                },
+                name: {
+                    bsonType: "string",
+                    description: "'nombre' must be a string and is required"
+                },
+                specialism: {
+                    bsonType: "string",
+                    description: "'especialidad' must be a string and is required"
+                },
+                number: {
+                    bsonType: "string",
+                    description: "'numero_telefono' must be an string and is required"
+                }
+            }
+        }
+    }
+});
+db.chef.insertMany([
+    {
+        name: "ChefA",
+        specialism: "Carnes",
+        number: "+57315553535"
+    },
+    {
+        name: "ChefB",
+        specialism: "Cocina Internacional",
+        number: "+57315553535"
+    },
+    {
+        name: "ChefC",
+        specialism: "Cocina Vegetariana",
+        number: "+57315553535"
+    },
+    {
+        name: "ChefD",
+        specialism: "Cocina Vegetariana",
+        number: "+57315553535"
+    },
+    {
+        name: "ChefE",
+        specialism: "Cocina Asiática",
+        number: "+57315553535"
+    },
+    {
+        name: "ChefF",
+        specialism: "Gourmet",
+        number: "+57315553535"
+    }
+]);
 
+db.createCollection("hamburguesa", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ['_id', 'name', 'category', 'chef', 'description', 'price', 'ingredients'],
+            properties: {
+                _id: {
+                    bsonType: "objectId"
+                },
+                name: {
+                    bsonType: "string",
+                    description: "'nombre' must be a string and is required"
+                },
+                category: {
+                    bsonType: "string",
+                    description: "'categoria' must be a string and is required"
+                },
+                chef: {
+                    bsonType: "string",
+                    description: "'nombre_chef' must be a string and is required"
+                },
+                description: {
+                    bsonType: "string",
+                    description: "'descripcion' must be a string and is required"
+                },
+                price: {
+                    bsonType: "int",
+                    description: "'precio' must be an integer and is required"
+                },
+                ingredients: {
+                    bsonType: "array",
+                    description: "'ingredientes' must be an array of ingredients and is required"
+                }
+            }
+        }
+    }
+});
+db.hamburguesa.insertMany([
+    {
+        name: "Hamburguesa para niños",
+        category: "Clasica",
+        chef: "ChefA",
+        description: "Hamburguesa pequeña",
+        price: 7,
+        ingredients: ["Pan", "Quesillo", "Tomate", "Lechuga", "Carne de res 80gr"]
+    },
+    {
+        name: "Hamburguesa Clasica",
+        category: "Clasica",
+        chef: "ChefA",
+        description: "Hamburguesa basica de la casa",
+        price: 9,
+        ingredients: ["Pan", "Queso cheddar", "Tomate", "Lechuga", "Cebolla", "Carne de res 125gr"]
+    },
+    {
+        name: "Hamburguesa verde",
+        category: "Vegetariana",
+        chef: "ChefC",
+        description: "Hamburguesa vegetariana",
+        price: 12,
+        ingredients: ["Pan Integral", "Quesillo", "Tomate", "Lechuga", "Cebolla", "Carne de lentaja 125gr"]
+    },
+    {
+        name: "Hamburguesa doble",
+        category: "Clasica",
+        chef: "ChefB",
+        description: "Hamburguesa doble carne con adicion de papas cascos",
+        price: 15,
+        ingredients: ["Pan Brioche", "Queso cheddar", "Tomate", "Lechuga", "Cebolla grille", "Carne de res 250gr"]
+    },
+    {
+        name: "Hamburguesa samurai",
+        category: "Asiatica",
+        chef: "ChefE",
+        description: "Hamburguesa asiatica",
+        price: 22,
+        ingredients: ["Pan Brioche", "Queso cheddar", "Tomate", "Lechuga", "Carne de res 125gr", "Aros de cebolla", "Algas molidas kombu, nori y wakame"]
+    },
+    {
+        name: "Hamburguesa de la casa",
+        category: "Gourmet",
+        chef: "ChefF",
+        description: "Hamburguesa basica de la casa",
+        price: 20,
+        ingredients: ["Pan Brioche", "Queso cheddar x2", "Tomate", "Lechuga", "Cebolla grille", "Carne de res 150gr", "Tocineta x2", "Pepinillos"]
+    }
+]);
+
+db.createCollection("rol", {
+    validator: {
+        $jsonSchema: {
+            bsonType: "object",
+            required: ['_id', 'rol', 'id', 'permisos'],
+            properties: {
+                _id: {
+                    bsonType: "objectId"
+                },
+                rol: {
+                    bsonType: "string"
+                },
+                id: {
+                    bsonType: "int"
+                },
+                permisos: {
+                    bsonType: "object"
+                }
+            }
+        }
+    }
+});
 db.rol.insertMany([
     {
-        id: Number(siguienteId("rol")),
-        rol: "admin",
-        permisos:{
-            "/*": ["*"]
+        id: 1,
+        rol: "Briyith",
+        permisos: {
+            "/chef": ["1.0.0", "2.0.1", "get", "put", "post", "delete"],
+            "/hamburguesa": ["1.0.0", "2.0.1", "get", "put", "post", "delete"],
+            "/ingrediente": ["1.0.0", "2.0.1", "get", "put", "post", "delete"]
         }
     },
     {
-        id: Number(siguienteId("rol")),
-        rol: "usuario",
-        permisos:{
-            "/usuario": ["1.0.0", "get", "put"]
+        id: 2,
+        rol: "chef",
+        permisos: {
+            "/chef": ["1.0.0", "2.0.1", "get"],
+            "/hamburguesa": ["1.0.0", "2.0.1", "get", "post"],
+            "/ingrediente": ["1.0.0", "2.0.1", "get"]
         }
     }
 ]);
