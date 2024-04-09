@@ -12,11 +12,11 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "16.3.1",
-    "express": "4.18.2",
+    "express": "^4.19.2",
     "express-routes-versioning": "^1.0.1",
     "express-validator": "^7.0.1",
-    "jose": "4.14.4",
-    "mongodb": "5.7.0"
+    "jose": "^4.15.5",
+    "mongodb": "^5.9.2"
   },
   "devDependencies": {
     "express-rate-limit": "6.9.0",
